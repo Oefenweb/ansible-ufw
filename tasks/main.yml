@@ -5,3 +5,38 @@
     name: ufw
     state: latest
   tags: [configuration, ufw, ufw-install]
+
+- name: reset
+  ufw:
+    state: reset
+  tags: [configuration, ufw, ufw-reset]
+
+- name: default policy
+  ufw:
+    policy: "{{ uwf_default_policy }}"
+  tags: [configuration, ufw, ufw-default-policy]
+
+- name: rules
+  ufw:
+    rule: "{{ item.rule }}"
+    interface: "{{ item.interface | default('') }}"
+    direction: "{{ item.direction | default('in') }}"
+    from_ip: "{{ item.from_ip | default('any') }}"
+    to_ip: "{{ item.to_ip | default('any') }}"
+    from_port: "{{ item.from_port | default('') }}"
+    to_port: "{{ item.to_port }}"
+    protocol: "{{ item.protocol | default('any') }}"
+    log: "{{ item.log | default(False) }}"
+  with_items: uwf_rules
+  when: uwf_rules
+  tags: [configuration, ufw, ufw-apply]
+
+- name: logging
+  ufw:
+    logging: "{{ uwf_logging }}"
+  tags: [configuration, ufw, ufw-logging]
+
+- name: enable
+  ufw:
+    state: enabled
+  tags: [configuration, ufw, ufw-enabled]
