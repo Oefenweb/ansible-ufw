@@ -8,7 +8,9 @@ None
 
 #### Variables
 
-None
+* `uwf_default_policy` [default: `deny`]: Default policy
+* `uwf_logging` [default: `off`]: Log level
+* `uwf_rules` [default: `[]`]: Rules to apply
 
 ## Dependencies
 
@@ -22,6 +24,36 @@ None
   roles:
   - ufw
 ```
+
+##### Allow ssh
+```yaml
+uwf_rules:
+  - rule: allow
+    to_port: 22
+    protocol: tcp
+```
+
+##### Allow all traffic on eth1
+```yaml
+uwf_rules:
+  - rule: allow
+    interface: eth1
+    to_port: ''
+```
+
+##### Allow snmp traffic from 1.2.3.4 on eth0
+```yaml
+uwf_rules:
+  - rule: allow
+    interface: eth0
+    from_ip: 1.2.3.4
+    to_port: 161
+    protocol: udp
+```
+
+#### TODO
+
+Make use of `omit`, available in **ansible 1.8**
 
 #### License
 
