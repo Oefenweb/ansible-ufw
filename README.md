@@ -1,6 +1,6 @@
 ## ufw [![Build Status](https://travis-ci.org/Oefenweb/ansible-ufw.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-ufw)
 
-Set up a ufw server in Debian-like systems.
+Set up ufw in Debian-like systems.
 
 #### Requirements
 
