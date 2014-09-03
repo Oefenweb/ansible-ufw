@@ -1,0 +1,7 @@
+---
+# tasks file for ufw
+- name: install
+  apt:
+    name: ufw
+    state: latest
+  tags: [configuration, ufw, ufw-install]
