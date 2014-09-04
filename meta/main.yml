@@ -15,4 +15,5 @@ galaxy_info:
     - all
   categories:
   - system
+  - networking
 dependencies: []
