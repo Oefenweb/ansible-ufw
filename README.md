@@ -10,7 +10,7 @@ None
 
 * `uwf_default_policy` [default: `deny`]: Default policy
 * `uwf_logging` [default: `off`]: Log level
-* `uwf_rules` [default: `[]`]: Rules to apply
+* `uwf_rules` [default: see `defaults/main.yml`]: Rules to apply
 
 ## Dependencies
 
