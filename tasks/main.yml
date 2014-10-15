@@ -6,14 +6,35 @@
     state: latest
   tags: [configuration, ufw, ufw-install]
 
+- name: create (local facts) directory
+  file:
+    path: /etc/ansible/facts.d/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  tags: [configuration, ufw, ufw-facts]
+
+- name: set local facts
+  template:
+    src: etc/ansible/facts.d/ufw.fact.j2
+    dest: /etc/ansible/facts.d/ufw.fact
+    owner: root
+    group: root
+    mode: 0644
+  register: configuration
+  tags: [configuration, ufw, ufw-facts]
+
 - name: reset
   ufw:
     state: reset
+  when: configuration|changed
   tags: [configuration, ufw, ufw-reset]
 
 - name: default policy
   ufw:
     policy: "{{ uwf_default_policy }}"
+  when: configuration|changed
   tags: [configuration, ufw, ufw-default-policy]
 
 - name: rules
@@ -28,12 +49,13 @@
     protocol: "{{ item.protocol | default('any') }}"
     log: "{{ item.log | default(False) }}"
   with_items: uwf_rules
-  when: uwf_rules
+  when: configuration|changed and uwf_rules
   tags: [configuration, ufw, ufw-apply]
 
 - name: logging
   ufw:
     logging: "{{ uwf_logging }}"
+  when: configuration|changed
   tags: [configuration, ufw, ufw-logging]
 
 - name: enable
