@@ -12,7 +12,7 @@ galaxy_info:
     - all
   - name: Debian
     versions:
-    - all
+    - wheezy
   categories:
   - system
   - networking
