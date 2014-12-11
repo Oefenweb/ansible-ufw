@@ -1,2 +1,5 @@
 ---
 # handlers file for ufw
+- name: Reload UFW
+  ufw:
+    state: reloaded
