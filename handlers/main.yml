@@ -1,2 +1,4 @@
 ---
 # handlers file for ufw
+- name: Reload UFW
+  command: ufw reload
