@@ -34,7 +34,7 @@
 - name: default policy
   ufw:
     policy: "{{ uwf_default_policy }}"
-  when: configuration|changed
+  notify: reload ufw
   tags: [configuration, ufw, ufw-default-policy]
 
 - name: rules
@@ -49,13 +49,13 @@
     protocol: "{{ item.protocol | default('any') }}"
     log: "{{ item.log | default(False) }}"
   with_items: uwf_rules
-  when: configuration|changed and uwf_rules
+  notify: reload ufw
   tags: [configuration, ufw, ufw-apply]
 
 - name: logging
   ufw:
     logging: "{{ uwf_logging }}"
-  when: configuration|changed
+  notify: reload ufw
   tags: [configuration, ufw, ufw-logging]
 
 - name: enable
