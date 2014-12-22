@@ -45,7 +45,7 @@
     from_ip: "{{ item.from_ip | default('any') }}"
     to_ip: "{{ item.to_ip | default('any') }}"
     from_port: "{{ item.from_port | default('') }}"
-    to_port: "{{ item.to_port }}"
+    to_port: "{{ item.to_port | default('') }}"
     protocol: "{{ item.protocol | default('any') }}"
     log: "{{ item.log | default(False) }}"
   with_items: uwf_rules
