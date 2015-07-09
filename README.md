@@ -10,9 +10,9 @@ None
 
 #### Variables
 
-* `uwf_default_policy` [default: `deny`]: Default policy
-* `uwf_logging` [default: `off`]: Log level
-* `uwf_rules` [default: see `defaults/main.yml`]: Rules to apply
+* `ufw_default_policy` [default: `deny`]: Default policy
+* `ufw_logging` [default: `off`]: Log level
+* `ufw_rules` [default: see `defaults/main.yml`]: Rules to apply
 
 ## Dependencies
 
@@ -29,7 +29,7 @@ None
 
 ##### Allow ssh
 ```yaml
-uwf_rules:
+ufw_rules:
   - rule: allow
     to_port: 22
     protocol: tcp
@@ -37,7 +37,7 @@ uwf_rules:
 
 ##### Allow all traffic on eth1
 ```yaml
-uwf_rules:
+ufw_rules:
   - rule: allow
     interface: eth1
     to_port: ''
@@ -45,7 +45,7 @@ uwf_rules:
 
 ##### Allow snmp traffic from 1.2.3.4 on eth0
 ```yaml
-uwf_rules:
+ufw_rules:
   - rule: allow
     interface: eth0
     from_ip: 1.2.3.4

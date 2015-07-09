@@ -33,7 +33,7 @@
 
 - name: default policy
   ufw:
-    policy: "{{ uwf_default_policy }}"
+    policy: "{{ ufw_default_policy }}"
   notify: reload ufw
   tags: [configuration, ufw, ufw-default-policy]
 
@@ -48,13 +48,13 @@
     to_port: "{{ item.to_port | default('') }}"
     protocol: "{{ item.protocol | default('any') }}"
     log: "{{ item.log | default(False) }}"
-  with_items: uwf_rules
+  with_items: ufw_rules
   notify: reload ufw
   tags: [configuration, ufw, ufw-apply]
 
 - name: logging
   ufw:
-    logging: "{{ uwf_logging }}"
+    logging: "{{ ufw_logging }}"
   notify: reload ufw
   tags: [configuration, ufw, ufw-logging]
 
