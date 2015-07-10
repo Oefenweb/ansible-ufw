@@ -1,8 +1,8 @@
 ---
 # defaults file for ufw
-uwf_default_policy: deny
-uwf_logging: 'off'
-uwf_rules:
+ufw_default_policy: deny
+ufw_logging: 'off'
+ufw_rules:
   - rule: allow
     interface: eth0
     to_port: 22
