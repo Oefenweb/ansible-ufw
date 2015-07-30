@@ -1,5 +1,5 @@
----
 # test file for cron-apt
+---
 - hosts: localhost
   remote_user: root
   roles:

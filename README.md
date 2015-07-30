@@ -24,33 +24,45 @@ None
 ---
 - hosts: all
   roles:
-  - ufw
+    - ufw
 ```
 
 ##### Allow ssh
 ```yaml
-ufw_rules:
-  - rule: allow
-    to_port: 22
-    protocol: tcp
+- hosts: all
+  roles:
+    - ufw
+  vars:
+    ufw_rules:
+      - rule: allow
+        to_port: 22
+        protocol: tcp
 ```
 
 ##### Allow all traffic on eth1
 ```yaml
-ufw_rules:
-  - rule: allow
-    interface: eth1
-    to_port: ''
+- hosts: all
+  roles:
+    - ufw
+  vars:
+    ufw_rules:
+      - rule: allow
+        interface: eth1
+        to_port: ''
 ```
 
 ##### Allow snmp traffic from 1.2.3.4 on eth0
 ```yaml
-ufw_rules:
-  - rule: allow
-    interface: eth0
-    from_ip: 1.2.3.4
-    to_port: 161
-    protocol: udp
+- hosts: all
+  roles:
+    - ufw
+  vars:
+    ufw_rules:
+      - rule: allow
+        interface: eth0
+        from_ip: 1.2.3.4
+        to_port: 161
+        protocol: udp
 ```
 
 #### TODO

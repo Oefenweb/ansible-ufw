@@ -1,9 +1,11 @@
----
 # tasks file for ufw
+---
 - name: install
   apt:
     name: ufw
     state: latest
+    update_cache: true
+    cache_valid_time: 3600
   tags: [configuration, ufw, ufw-install]
 
 - name: create (local facts) directory
