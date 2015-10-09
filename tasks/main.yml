@@ -30,7 +30,7 @@
 - name: reset
   ufw:
     state: reset
-  when: configuration|changed
+  when: configuration | changed
   tags: [configuration, ufw, ufw-reset]
 
 - name: default policy
