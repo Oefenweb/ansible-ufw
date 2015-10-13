@@ -1,6 +1,6 @@
-# test file for cron-apt
+# test file for ufw
 ---
 - hosts: localhost
   remote_user: root
   roles:
-    - ansible-ufw
+    - ../../
