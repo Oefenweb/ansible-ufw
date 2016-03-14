@@ -44,7 +44,7 @@ before_install:
   - sudo apt-get update -qq
 
   # Remove ufw
-  - sudo apt-get remove --purge ufw
+  - sudo apt-get remove --purge --yes ufw
 
 install:
   # Install Ansible.
