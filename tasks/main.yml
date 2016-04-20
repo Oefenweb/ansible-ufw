@@ -39,6 +39,14 @@
   notify: reload ufw
   tags: [configuration, ufw, ufw-default-policy]
 
+- name: default outgoing policy
+    ufw:
+      policy: "{{ ufw_default_outgoing_policy }}"
+      direction: outgoing
+    notify: reload ufw
+    when: ufw_default_outgoing_policy is defined
+    tags: [configuration, ufw, ufw-default-policy]
+                    
 - name: rules
   ufw:
     rule: "{{ item.rule }}"
