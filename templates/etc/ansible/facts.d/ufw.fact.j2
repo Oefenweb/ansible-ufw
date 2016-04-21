@@ -1,5 +1,6 @@
 {
-  "default_policy": {{ uwf_default_policy | to_nice_json }},
-  "logging": {{ uwf_logging | to_nice_json }},
-  "rules": {{ uwf_rules | to_nice_json }}
+  "default_incoming_policy": {{ ufw_default_incoming_policy | to_nice_json }},
+  "default_outgoing_policy": {{ ufw_default_outgoing_policy | to_nice_json }},
+  "logging": {{ ufw_logging | to_nice_json }},
+  "rules": {{ ufw_rules | to_nice_json }}
 }

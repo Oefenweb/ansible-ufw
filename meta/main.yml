@@ -1,5 +1,5 @@
----
 # meta file for ufw
+---
 galaxy_info:
   author: Mischa ter Smitten
   company: Oefenweb.nl B.V.
@@ -7,13 +7,16 @@ galaxy_info:
   license: MIT
   min_ansible_version: 1.6
   platforms:
-  - name: Ubuntu
-    versions:
-    - all
-  - name: Debian
-    versions:
-    - wheezy
-  categories:
-  - system
-  - networking
+    - name: Ubuntu
+      versions:
+        - precise
+        - trusty
+    - name: Debian
+      versions:
+        - wheezy
+        - jessie
+  galaxy_tags:
+    - system
+    - networking
+    - firewall
 dependencies: []

@@ -1,10 +1,17 @@
----
 # tasks file for ufw
-- name: install
+---
+- name: install dependencies
   apt:
-    name: ufw
+    name: "{{ item }}"
     state: latest
-  tags: [configuration, ufw, ufw-install]
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+  with_items: "{{ ufw_dependencies }}"
+  tags:
+    - configuration
+    - ufw
+    - ufw-install
+    - ufw-install-dependencies
 
 - name: create (local facts) directory
   file:
@@ -13,29 +20,59 @@
     owner: root
     group: root
     mode: 0755
-  tags: [configuration, ufw, ufw-facts]
+  tags:
+    - configuration
+    - ufw
+    - ufw-facts
 
-- name: set local facts
+- name: update configuration file(s)
   template:
-    src: etc/ansible/facts.d/ufw.fact.j2
-    dest: /etc/ansible/facts.d/ufw.fact
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: root
     group: root
     mode: 0644
+  with_items:
+    - src: etc/default/ufw.j2
+      dest: /etc/default/ufw
+    - src: etc/ansible/facts.d/ufw.fact.j2
+      dest: /etc/ansible/facts.d/ufw.fact
   register: configuration
-  tags: [configuration, ufw, ufw-facts]
+  tags:
+    - configuration
+    - ufw
+    - ufw-facts
 
 - name: reset
   ufw:
     state: reset
-  when: configuration|changed
-  tags: [configuration, ufw, ufw-reset]
+  when: configuration | changed
+  tags:
+    - configuration
+    - ufw
+    - ufw-reset
 
-- name: default policy
+- name: default (incoming) policy
   ufw:
-    policy: "{{ uwf_default_policy }}"
+    policy: "{{ ufw_default_incoming_policy }}"
+    direction: incoming
   notify: reload ufw
-  tags: [configuration, ufw, ufw-default-policy]
+  tags:
+    - configuration
+    - ufw
+    - ufw-default-policy
+    - ufw-default-policy-incoming
+
+- name: default (outgoing) policy
+  ufw:
+    policy: "{{ ufw_default_outgoing_policy }}"
+    direction: outgoing
+  notify: reload ufw
+  tags:
+    - configuration
+    - ufw
+    - ufw-default-policy
+    - ufw-default-policy-outgoing
 
 - name: rules
   ufw:
@@ -45,20 +82,29 @@
     from_ip: "{{ item.from_ip | default('any') }}"
     to_ip: "{{ item.to_ip | default('any') }}"
     from_port: "{{ item.from_port | default('') }}"
-    to_port: "{{ item.to_port }}"
+    to_port: "{{ item.to_port | default('') }}"
     protocol: "{{ item.protocol | default('any') }}"
     log: "{{ item.log | default(False) }}"
-  with_items: uwf_rules
+  with_items: "{{ ufw_rules }}"
   notify: reload ufw
-  tags: [configuration, ufw, ufw-apply]
+  tags:
+    - configuration
+    - ufw
+    - ufw-rules
 
 - name: logging
   ufw:
-    logging: "{{ uwf_logging }}"
+    logging: "{{ ufw_logging }}"
   notify: reload ufw
-  tags: [configuration, ufw, ufw-logging]
+  tags:
+    - configuration
+    - ufw
+    - ufw-logging
 
-- name: enable
+- name: start and enable service
   ufw:
     state: enabled
-  tags: [configuration, ufw, ufw-enabled]
+  tags:
+    - configuration
+    - ufw
+    - ufw-start-enable-service
