@@ -1,7 +1,11 @@
 # defaults file for ufw
 ---
-ufw_default_policy: deny
+# TODO: Cleanup next major release
+ufw_default_incoming_policy: "{{ ufw_default_policy | default('deny') }}"
+ufw_default_outgoing_policy: allow
+
 ufw_logging: 'off'
+
 ufw_rules:
   - rule: allow
     interface: eth0

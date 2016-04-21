@@ -1,12 +1,17 @@
 # tasks file for ufw
 ---
-- name: install
+- name: install dependencies
   apt:
-    name: ufw
+    name: "{{ item }}"
     state: latest
     update_cache: true
     cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
-  tags: [configuration, ufw, ufw-install]
+  with_items: "{{ ufw_dependencies }}"
+  tags:
+    - configuration
+    - ufw
+    - ufw-install
+    - ufw-install-dependencies
 
 - name: create (local facts) directory
   file:
@@ -15,7 +20,10 @@
     owner: root
     group: root
     mode: 0755
-  tags: [configuration, ufw, ufw-facts]
+  tags:
+    - configuration
+    - ufw
+    - ufw-facts
 
 - name: set local facts
   template:
@@ -25,28 +33,42 @@
     group: root
     mode: 0644
   register: configuration
-  tags: [configuration, ufw, ufw-facts]
+  tags:
+    - configuration
+    - ufw
+    - ufw-facts
 
 - name: reset
   ufw:
     state: reset
   when: configuration | changed
-  tags: [configuration, ufw, ufw-reset]
+  tags:
+    - configuration
+    - ufw
+    - ufw-reset
 
-- name: default policy
+- name: default (incoming) policy
   ufw:
-    policy: "{{ ufw_default_policy }}"
+    policy: "{{ ufw_default_incoming_policy }}"
+    direction: incoming
   notify: reload ufw
-  tags: [configuration, ufw, ufw-default-policy]
+  tags:
+    - configuration
+    - ufw
+    - ufw-default-policy
+    - ufw-default-policy-incoming
 
-- name: default outgoing policy
+- name: default (outgoing) policy
   ufw:
     policy: "{{ ufw_default_outgoing_policy }}"
     direction: outgoing
   notify: reload ufw
-  when: ufw_default_outgoing_policy is defined
-  tags: [configuration, ufw, ufw-default-policy]
-                    
+  tags:
+    - configuration
+    - ufw
+    - ufw-default-policy
+    - ufw-default-policy-outgoing
+
 - name: rules
   ufw:
     rule: "{{ item.rule }}"
@@ -58,17 +80,26 @@
     to_port: "{{ item.to_port | default('') }}"
     protocol: "{{ item.protocol | default('any') }}"
     log: "{{ item.log | default(False) }}"
-  with_items: ufw_rules
+  with_items: "{{ ufw_rules }}"
   notify: reload ufw
-  tags: [configuration, ufw, ufw-apply]
+  tags:
+    - configuration
+    - ufw
+    - ufw-rules
 
 - name: logging
   ufw:
     logging: "{{ ufw_logging }}"
   notify: reload ufw
-  tags: [configuration, ufw, ufw-logging]
+  tags:
+    - configuration
+    - ufw
+    - ufw-logging
 
-- name: enable
+- name: start and enable service
   ufw:
     state: enabled
-  tags: [configuration, ufw, ufw-enabled]
+  tags:
+    - configuration
+    - ufw
+    - ufw-start-enable-service
