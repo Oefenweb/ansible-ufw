@@ -25,13 +25,18 @@
     - ufw
     - ufw-facts
 
-- name: set local facts
+- name: update configuration file(s)
   template:
-    src: etc/ansible/facts.d/ufw.fact.j2
-    dest: /etc/ansible/facts.d/ufw.fact
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: root
     group: root
     mode: 0644
+  with_items:
+    - src: etc/default/ufw.j2
+      dest: /etc/default/ufw
+    - src: etc/ansible/facts.d/ufw.fact.j2
+      dest: /etc/ansible/facts.d/ufw.fact
   register: configuration
   tags:
     - configuration
