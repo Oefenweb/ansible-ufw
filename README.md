@@ -10,8 +10,11 @@ None
 
 #### Variables
 
-* `ufw_default_policy` [default: `deny`]: Default policy
+* `ufw_default_incoming_policy` [default: `deny`]: Default (incoming) policy
+* `ufw_default_outgoing_policy` [default: `allow`]: Default (outgoing) policy
+
 * `ufw_logging` [default: `off`]: Log level
+
 * `ufw_rules` [default: see `defaults/main.yml`]: Rules to apply
 
 ## Dependencies
