@@ -1,19 +1,18 @@
 # defaults file for ufw
 ---
-# TODO: Cleanup next major release
-ufw_default_incoming_policy: "{{ ufw_default_policy | default('deny') }}"
+ufw_default_incoming_policy: deny
 ufw_default_outgoing_policy: allow
 
 ufw_logging: 'off'
 
 ufw_rules:
   - rule: allow
-    interface: eth0
+    interface: "{{ ansible_default_ipv4['interface'] }}"
     to_port: 22
     protocol: tcp
 
   - rule: allow
-    interface: eth0
+    interface: "{{ ansible_default_ipv4['interface'] }}"
     to_port: 23
     protocol: udp
 
