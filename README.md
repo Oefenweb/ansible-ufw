@@ -1,6 +1,6 @@
 ## ufw
 
-[![Build Status](https://travis-ci.org/Oefenweb/ansible-ufw.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-ufw) [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-ufw-blue.svg)](https://galaxy.ansible.com/list#/roles/1613)
+[![Build Status](https://travis-ci.org/Oefenweb/ansible-ufw.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-ufw) [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-ufw-blue.svg)](https://galaxy.ansible.com/tersmitten/ufw)
 
 Set up ufw in Debian-like systems.
 
@@ -76,10 +76,6 @@ None
         to_port: 161
         protocol: udp
 ```
-
-#### TODO
-
-Make use of `omit`, available in **ansible 1.8**
 
 #### License
 
