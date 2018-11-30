@@ -46,7 +46,7 @@
 - name: reset
   ufw:
     state: reset
-  when: configuration | changed
+  when: configuration is changed
   tags:
     - configuration
     - ufw
