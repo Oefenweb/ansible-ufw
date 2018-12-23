@@ -2,16 +2,14 @@
 ---
 - name: install dependencies
   apt:
-    name: "{{ item }}"
     state: "{{ apt_install_state | default('latest') }}"
     update_cache: true
-    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
-  with_items: "{{ ufw_dependencies }}"
+    name:
+      - 'ufw'
   tags:
     - configuration
     - ufw
     - ufw-install
-    - ufw-install-dependencies
 
 - name: create (local facts) directory
   file:
@@ -46,7 +44,7 @@
 - name: reset
   ufw:
     state: reset
-  when: configuration is changed
+  when: configuration.changed
   tags:
     - configuration
     - ufw
