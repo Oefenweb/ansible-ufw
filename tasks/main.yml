@@ -92,6 +92,42 @@
     - ufw
     - ufw-rules
 
+- name: rules from groupvars
+  ufw:
+    rule: "{{ item.rule }}"
+    interface: "{{ item.interface | default('') }}"
+    direction: "{{ item.direction | default('in') }}"
+    from_ip: "{{ item.from_ip | default('any') }}"
+    to_ip: "{{ item.to_ip | default('any') }}"
+    from_port: "{{ item.from_port | default('') }}"
+    to_port: "{{ item.to_port | default('') }}"
+    protocol: "{{ item.protocol | default('any') }}"
+    log: "{{ item.log | default(False) }}"
+  with_items: "{{ ufw_rules_groupvars }}"
+  notify: reload ufw
+  tags:
+    - configuration
+    - ufw
+    - ufw-rules
+
+- name: rules from hostvars
+  ufw:
+    rule: "{{ item.rule }}"
+    interface: "{{ item.interface | default('') }}"
+    direction: "{{ item.direction | default('in') }}"
+    from_ip: "{{ item.from_ip | default('any') }}"
+    to_ip: "{{ item.to_ip | default('any') }}"
+    from_port: "{{ item.from_port | default('') }}"
+    to_port: "{{ item.to_port | default('') }}"
+    protocol: "{{ item.protocol | default('any') }}"
+    log: "{{ item.log | default(False) }}"
+  with_items: "{{ ufw_rules_hostvars }}"
+  notify: reload ufw
+  tags:
+    - configuration
+    - ufw
+    - ufw-rules
+
 - name: logging
   ufw:
     logging: "{{ ufw_logging }}"
