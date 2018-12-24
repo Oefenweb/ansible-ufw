@@ -3,3 +3,7 @@
 - name: reload ufw
   ufw:
     state: reloaded
+
+-  name: reset ufw
+   ufw:
+     state: reset
