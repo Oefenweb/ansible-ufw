@@ -2,11 +2,10 @@
 ---
 - name: install dependencies
   apt:
-    name: "{{ item }}"
+    name: "{{ ufw_dependencies }}"
     state: "{{ apt_install_state | default('latest') }}"
     update_cache: true
     cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
-  with_items: "{{ ufw_dependencies }}"
   tags:
     - configuration
     - ufw
@@ -84,7 +83,7 @@
     from_port: "{{ item.from_port | default('') }}"
     to_port: "{{ item.to_port | default('') }}"
     protocol: "{{ item.protocol | default('any') }}"
-    log: "{{ item.log | default(False) }}"
+    log: "{{ item.log | default(false) }}"
   with_items: "{{ ufw_rules }}"
   notify: reload ufw
   tags:
