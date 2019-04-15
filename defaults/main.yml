@@ -11,11 +11,6 @@ ufw_rules:
     to_port: 22
     protocol: tcp
 
-  - rule: allow
-    interface: "{{ ansible_default_ipv4['interface'] }}"
-    to_port: 23
-    protocol: udp
-
 # /etc/default/ufw
 ufw_etc_default_ipv6: true
 ufw_etc_default_default_input_policy: DROP
