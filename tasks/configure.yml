@@ -1,0 +1,76 @@
+# tasks file for ufw
+---
+- name: configure | create (local facts) directory
+  file:
+    path: /etc/ansible/facts.d/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  tags:
+    - ufw-configure-facts
+
+- name: configure | update configuration file(s)
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - src: etc/default/ufw.j2
+      dest: /etc/default/ufw
+    - src: etc/ansible/facts.d/ufw.fact.j2
+      dest: /etc/ansible/facts.d/ufw.fact
+  register: configuration
+  tags:
+    - ufw-configure-facts
+
+- name: configure | reset
+  ufw:
+    state: reset
+  when: configuration is changed
+  tags:
+    - ufw-configure-reset
+
+- name: configure | default (incoming) policy
+  ufw:
+    policy: "{{ ufw_default_incoming_policy }}"
+    direction: incoming
+  notify: reload ufw
+  tags:
+    - ufw-configure-default-policy
+    - ufw-configure-default-policy-incoming
+
+- name: configure | default (outgoing) policy
+  ufw:
+    policy: "{{ ufw_default_outgoing_policy }}"
+    direction: outgoing
+  notify: reload ufw
+  tags:
+    - ufw-configure-default-policy
+    - ufw-configure-default-policy-outgoing
+
+- name: configure | rules
+  ufw:
+    rule: "{{ item.rule }}"
+    interface: "{{ item.interface | default('') }}"
+    direction: "{{ item.direction | default('in') }}"
+    from_ip: "{{ item.from_ip | default('any') }}"
+    to_ip: "{{ item.to_ip | default('any') }}"
+    from_port: "{{ item.from_port | default('') }}"
+    to_port: "{{ item.to_port | default('') }}"
+    protocol: "{{ item.protocol | default('any') }}"
+    route: "{{ item.route | default(omit) }}"
+    log: "{{ item.log | default(false) }}"
+  with_items: "{{ ufw_rules }}"
+  notify: reload ufw
+  tags:
+    - ufw-configure-rules
+
+- name: configure | logging
+  ufw:
+    logging: "{{ ufw_logging }}"
+  notify: reload ufw
+  tags:
+    - ufw-configure-logging
