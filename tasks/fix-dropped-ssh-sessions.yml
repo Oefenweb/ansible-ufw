@@ -1,5 +1,9 @@
 # tasks file for ufw
----
+- name: check if conntrack exists
+  stat:
+    path: /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal
+  register: nf_conntrack_tcp_be_liberal
+
 - name: fix dropped ssh sessions | configure kernel
   sysctl:
     name: net.netfilter.nf_conntrack_tcp_be_liberal
@@ -7,5 +11,6 @@
     state: present
     sysctl_set: true
     reload: true
+  when: nf_conntrack_tcp_be_liberal.stat.exists
   tags:
     - ufw-fix-dropped-ssh-sessions-configure-kernel
