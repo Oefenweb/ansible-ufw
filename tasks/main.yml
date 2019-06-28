@@ -1,105 +1,34 @@
 # tasks file for ufw
 ---
-- name: install dependencies
-  apt:
-    name: "{{ ufw_dependencies }}"
-    state: "{{ apt_install_state | default('latest') }}"
-    update_cache: true
-    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+- name: facts | set
+  set_fact:
+     kernel_version: "{{ ansible_kernel | regex_search('^([0-9]+\\.[0-9]+\\.[0-9]+)') }}"
+  tags:
+    - configuration
+    - ufw
+    - ufw-facts
+
+# see https://askubuntu.com/a/1064533/261010, https://www.spinics.net/lists/netfilter-devel/msg55682.html
+- include: fix-dropped-ssh-sessions.yml
+  when:
+    - kernel_version is version('4.14', '>=')
+    - kernel_version is version('5', '<')
+  tags:
+    - configuration
+    - ufw
+    - ufw-fix-dropped-ssh-sessions
+
+- include: install.yml
   tags:
     - configuration
     - ufw
     - ufw-install
-    - ufw-install-dependencies
 
-- name: create (local facts) directory
-  file:
-    path: /etc/ansible/facts.d/
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
+- include: configure.yml
   tags:
     - configuration
     - ufw
-    - ufw-facts
-
-- name: update configuration file(s)
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: root
-    group: root
-    mode: 0644
-  with_items:
-    - src: etc/default/ufw.j2
-      dest: /etc/default/ufw
-    - src: etc/ansible/facts.d/ufw.fact.j2
-      dest: /etc/ansible/facts.d/ufw.fact
-  register: configuration
-  tags:
-    - configuration
-    - ufw
-    - ufw-facts
-
-- name: reset
-  ufw:
-    state: reset
-  when: configuration is changed
-  tags:
-    - configuration
-    - ufw
-    - ufw-reset
-
-- name: default (incoming) policy
-  ufw:
-    policy: "{{ ufw_default_incoming_policy }}"
-    direction: incoming
-  notify: reload ufw
-  tags:
-    - configuration
-    - ufw
-    - ufw-default-policy
-    - ufw-default-policy-incoming
-
-- name: default (outgoing) policy
-  ufw:
-    policy: "{{ ufw_default_outgoing_policy }}"
-    direction: outgoing
-  notify: reload ufw
-  tags:
-    - configuration
-    - ufw
-    - ufw-default-policy
-    - ufw-default-policy-outgoing
-
-- name: rules
-  ufw:
-    rule: "{{ item.rule }}"
-    interface: "{{ item.interface | default('') }}"
-    direction: "{{ item.direction | default('in') }}"
-    from_ip: "{{ item.from_ip | default('any') }}"
-    to_ip: "{{ item.to_ip | default('any') }}"
-    from_port: "{{ item.from_port | default('') }}"
-    to_port: "{{ item.to_port | default('') }}"
-    protocol: "{{ item.protocol | default('any') }}"
-    route: "{{ item.route | default(omit) }}"
-    log: "{{ item.log | default(false) }}"
-  with_items: "{{ ufw_rules }}"
-  notify: reload ufw
-  tags:
-    - configuration
-    - ufw
-    - ufw-rules
-
-- name: logging
-  ufw:
-    logging: "{{ ufw_logging }}"
-  notify: reload ufw
-  tags:
-    - configuration
-    - ufw
-    - ufw-logging
+    - ufw-configure
 
 - name: start and enable service
   ufw:
