@@ -73,6 +73,11 @@ branches:
   only:
     - master
 
+matrix:
+  allow_failures:
+    # https://github.com/ansible/ansible/issues/56674
+    - env: ANSIBLE_VERSION=2.8.0
+
 before_install:
   - sudo apt-get update -qq
 
