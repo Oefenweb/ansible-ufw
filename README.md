@@ -63,7 +63,7 @@ None
       - rule: allow
         interface: eth1
         to_port: ''
-	comment: 'allow all kind of traffic on interface eth1'
+	comment: 'allow all traffic on interface eth1'
 ```
 
 ##### Allow snmp traffic from 1.2.3.4 on eth0
