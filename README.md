@@ -50,6 +50,7 @@ None
       - rule: allow
         to_port: 22
         protocol: tcp
+        comment: 'allow incoming connection on standard ssh port'
 ```
 
 ##### Allow all traffic on eth1
@@ -62,6 +63,7 @@ None
       - rule: allow
         interface: eth1
         to_port: ''
+        comment: 'allow all traffic on interface eth1'
 ```
 
 ##### Allow snmp traffic from 1.2.3.4 on eth0
