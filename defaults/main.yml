@@ -23,3 +23,15 @@ ufw_etc_default_ipt_modules:
   - nf_conntrack_ftp
   - nf_nat_ftp
   - nf_conntrack_netbios_ns
+
+ufw_etc_ufw_after_manage: false
+ufw_etc_ufw_after6_rules: []
+ufw_etc_ufw_after_rules: []
+
+ufw_etc_ufw_before_manage: false
+ufw_etc_ufw_before6_rules: []
+ufw_etc_ufw_before_rules: []
+
+ufw_etc_ufw_user_manage: false
+ufw_etc_ufw_user6_rules: []
+ufw_etc_ufw_user_rules: []
