@@ -26,68 +26,14 @@
   tags:
     - ufw-configure-facts
 
-- name: configure | rules | update after file(s)
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: root
-    group: root
-    mode: 0640
-  with_items:
-    - src: "{{ ufw_etc_ufw_after6_rules_file.lstrip('/') }}.j2"
-      dest: "{{ ufw_etc_ufw_after6_rules_file }}"
-    - src: "{{ ufw_etc_ufw_after_rules_file.lstrip('/') }}.j2"
-      dest: "{{ ufw_etc_ufw_after_rules_file }}"
-  when: ufw_etc_ufw_after_manage | bool
-  register: _after_rules
-  tags:
-    - ufw-configure-rules
-    - ufw-configure-rules-after
-
-- name: configure | rules | update before file(s)
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: root
-    group: root
-    mode: 0640
-  with_items:
-    - src: "{{ ufw_etc_ufw_before6_rules_file.lstrip('/') }}.j2"
-      dest: "{{ ufw_etc_ufw_before6_rules_file }}"
-    - src: "{{ ufw_etc_ufw_before_rules_file.lstrip('/') }}.j2"
-      dest: "{{ ufw_etc_ufw_before_rules_file }}"
-  when: ufw_etc_ufw_before_manage | bool
-  register: _before_rules
-  tags:
-    - ufw-configure-rules
-    - ufw-configure-rules-before
-
-- name: configure | rules | update user file(s)
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: root
-    group: root
-    mode: 0640
-  with_items:
-    - src: "{{ ufw_etc_ufw_user6_rules_file.lstrip('/') }}.j2"
-      dest: "{{ ufw_etc_ufw_user6_rules_file }}"
-    - src: "{{ ufw_etc_ufw_user_rules_file.lstrip('/') }}.j2"
-      dest: "{{ ufw_etc_ufw_user_rules_file }}"
-  when: ufw_etc_ufw_user_manage | bool
-  register: _user_rules
-  tags:
-    - ufw-configure-rules
-    - ufw-configure-rules-user
-
 - name: configure | reset
   ufw:
     state: reset
   when: >
     _configuration is changed
-    or _after_rules is changed
-    or _before_rules is changed
-    or _user_rules is changed
+#    or _after_rules is changed
+#    or _before_rules is changed
+#    or _user_rules is changed
   tags:
     - ufw-configure-reset
 
@@ -133,3 +79,60 @@
   notify: reload ufw
   tags:
     - ufw-configure-logging
+
+- name: configure | rules | update after file(s)
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0640
+  with_items:
+    - src: "{{ ufw_etc_ufw_after6_rules_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ufw_after6_rules_file }}"
+    - src: "{{ ufw_etc_ufw_after_rules_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ufw_after_rules_file }}"
+  when: ufw_etc_ufw_after_manage | bool
+  register: _after_rules
+  notify: reload ufw
+  tags:
+    - ufw-configure-rules
+    - ufw-configure-rules-after
+
+- name: configure | rules | update before file(s)
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0640
+  with_items:
+    - src: "{{ ufw_etc_ufw_before6_rules_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ufw_before6_rules_file }}"
+    - src: "{{ ufw_etc_ufw_before_rules_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ufw_before_rules_file }}"
+  when: ufw_etc_ufw_before_manage | bool
+  register: _before_rules
+  notify: reload ufw
+  tags:
+    - ufw-configure-rules
+    - ufw-configure-rules-before
+
+- name: configure | rules | update user file(s)
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0640
+  with_items:
+    - src: "{{ ufw_etc_ufw_user6_rules_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ufw_user6_rules_file }}"
+    - src: "{{ ufw_etc_ufw_user_rules_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ufw_user_rules_file }}"
+  when: ufw_etc_ufw_user_manage | bool
+  register: _user_rules
+  notify: reload ufw
+  tags:
+    - ufw-configure-rules
+    - ufw-configure-rules-user
