@@ -1,4 +1,4 @@
-# tasks file for ufw
+# tasks file
 ---
 - name: facts | set
   set_fact:

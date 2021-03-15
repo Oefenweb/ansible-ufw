@@ -1,6 +1,7 @@
-# meta file for ufw
+# meta file
 ---
 galaxy_info:
+  namespace: oefenweb
   role_name: ufw
   author: Mischa ter Smitten
   company: Oefenweb.nl B.V.

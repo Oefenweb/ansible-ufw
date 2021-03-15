@@ -1,4 +1,4 @@
-# vars file for ufw
+# vars file
 ---
 ufw_dependencies:
   - ufw

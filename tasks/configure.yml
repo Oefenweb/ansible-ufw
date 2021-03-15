@@ -1,4 +1,4 @@
-# tasks file for ufw
+# tasks file
 ---
 - name: configure | create (local facts) directory
   file:
