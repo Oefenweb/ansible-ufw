@@ -1,0 +1,35 @@
+---
+
+- name: facts | set
+  set_fact:
+    kernel_version: "{{ ansible_kernel | regex_search('^([0-9]+\\.[0-9]+\\.[0-9]+)') }}"
+  tags:
+    - configuration
+    - ufw
+    - ufw-facts
+
+- block:
+    #
+    - name: Import EPEL GPG key.
+      rpm_key:
+        key: https://archive.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+        state: present
+
+    - name: install EPEL repository
+      yum_repository:
+        name: epel
+        state: present
+        description: Extra Packages for Enterprise Linux {{ ansible_distribution_major_version }} - $basearch
+        baseurl: http://download.fedoraproject.org/pub/epel/{{ ansible_distribution_major_version }}/$basearch
+        gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+        metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
+        failovermethod: priority
+        gpgcheck: 1
+        enabled: 1
+  when:
+    - ansible_os_family | lower == 'redhat'
+
+- name: update package cache
+  package:
+    update_cache: true
+    # cache_valid_time: "{{ ufw_update_cache_valid_time | default(3600) }}"

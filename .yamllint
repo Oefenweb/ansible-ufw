@@ -1,0 +1,23 @@
+---
+extends: default
+rules:
+  line-length:
+    max: 195
+    level: warning
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+  indentation:
+    spaces: 2
+  comments: disable
+  comments-indentation: disable
+
+ignore: |
+  tests/
+  molecule/
+  .molecule/
+  .travis.yml
+  .tox

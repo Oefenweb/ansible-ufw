@@ -2,6 +2,7 @@
 ---
 galaxy_info:
   role_name: ufw
+  namespace: oefenweb
   author: Mischa ter Smitten
   company: Oefenweb.nl B.V.
   description: Set up ufw in Debian-like systems
@@ -19,8 +20,14 @@ galaxy_info:
         - wheezy
         - jessie
         - stretch
+    - name: ArchLinux
+    - name: EL
+      version:
+        - 8
+
   galaxy_tags:
     - system
     - networking
     - firewall
+
 dependencies: []

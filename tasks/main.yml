@@ -1,12 +1,8 @@
 # tasks file for ufw
 ---
-- name: facts | set
-  set_fact:
-     kernel_version: "{{ ansible_kernel | regex_search('^([0-9]+\\.[0-9]+\\.[0-9]+)') }}"
-  tags:
-    - configuration
-    - ufw
-    - ufw-facts
+
+- include_tasks: prepare.yaml
+
 
 # see https://askubuntu.com/a/1064533/261010, https://www.spinics.net/lists/netfilter-devel/msg55682.html
 - include: fix-dropped-ssh-sessions.yml
@@ -31,8 +27,10 @@
     - ufw-configure
 
 - name: start and enable service
-  ufw:
-    state: enabled
+  service:
+    name: ufw
+    state: started
+    enabled: true
   tags:
     - configuration
     - ufw

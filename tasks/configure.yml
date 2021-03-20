@@ -1,5 +1,11 @@
 # tasks file for ufw
 ---
+- name: configure | re-read facts
+  setup:
+    gather_subset:
+      - 'all'
+#      - 'any'
+
 - name: configure | create (local facts) directory
   file:
     path: /etc/ansible/facts.d/
@@ -26,7 +32,7 @@
   tags:
     - ufw-configure-facts
 
-- name: configure | reset
+- name: configure | reset   # noqa no-handler
   ufw:
     state: reset
   when: configuration is changed

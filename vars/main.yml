@@ -1,7 +1,9 @@
 # vars file for ufw
 ---
+
 ufw_dependencies:
   - ufw
+  - iproute2
 
 ufw_facts:
   default_incoming_policy: "{{ ufw_default_incoming_policy }}"

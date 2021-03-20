@@ -1,0 +1,35 @@
+---
+
+fail2ban_ignoreips:
+  - 127.0.0.1/8
+  - 192.168.0.0/24
+
+fail2ban_conf:
+  default:
+    dbpurgeage: 5d
+
+fail2ban_jail:
+  default:
+    bantime: 3200
+
+fail2ban_jails:
+  - name: ssh
+    enabled: true
+    port: ssh
+    filter: sshd
+    logpath: /var/log/authlog.log
+    findtime: 12h
+    bantime: 2w
+    maxretry: 2
+  - name: ssh-breakin
+    enabled: true
+    port: ssh
+    filter: sshd-break-in
+    logpath: /var/log/authlog.log
+    maxretry: 2
+  - name: ssh-ddos
+    enabled: true
+    port: ssh
+    filter: sshd-ddos
+    logpath: /var/log/authlog.log
+    maxretry: 2

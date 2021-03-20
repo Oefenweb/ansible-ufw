@@ -1,0 +1,47 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .
+  flake8 .
+
+platforms:
+  - name: instance
+    image: "diodonfrost/ansible-${DISTRIBUTION:-debian:10}"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    docker_host: "${DOCKER_HOST:-unix://run/docker.sock}"
+    privileged: true
+    pre_build_image: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+
+provisioner:
+  name: ansible
+  ansible_args:
+    - --diff
+    # - -vv
+  config_options:
+    defaults:
+      deprecation_warnings: True
+      stdout_callback: yaml
+
+scenario:
+  test_sequence:
+    - lint
+    - destroy
+    - dependency
+    - syntax
+    - create
+    - prepare
+    - converge
+    - verify
+    - destroy
+
+verifier:
+  name: testinfra

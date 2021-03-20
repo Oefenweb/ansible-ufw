@@ -1,0 +1,108 @@
+---
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 5 * * *"
+
+defaults:
+  run:
+    working-directory: 'ansible-ufw'
+
+jobs:
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-18.04
+    steps:
+      - name: check out the codebase.
+        uses: actions/checkout@v2
+        with:
+          path: 'ansible-ufw'
+
+      - name: set up python.
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: install dependencies.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip python3-setuptools
+          sudo pip3 install ansible ansible-lint yamllint==1.26.0 flake8==3.8.4 PyYAML==5.3.1
+
+      - name: YAMLlint
+        run: |
+          yamllint --version
+          yamllint .
+      - name: ansible-lint
+        run: |
+          ansible-lint --version
+          ansible-lint .
+      - name: flake8
+        run: |
+          flake8 --version
+          flake8 .
+
+  test:
+    name: "${{ matrix.image }} / python: ${{ matrix.python-version }}, ansible: ${{ matrix.ansible-version }}"
+    needs:
+      - lint
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - archlinux:latest
+          - debian:9
+          - debian:10
+          - ubuntu:18.04
+          - ubuntu:20.04
+          - centos:8
+          - oraclelinux:8
+        python-version:
+          - '3.8'
+          - '3.9'
+        ansible-version:
+          - '2.8'
+          - '2.9'
+          - '2.10'
+
+    steps:
+      - name: check out the codebase.
+        uses: actions/checkout@v2
+        with:
+          path: 'ansible-ufw'
+
+      - name: set up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r test-requirements.txt
+
+      - name: test with tox
+        run: |
+          tox -e py$(printf "${{ matrix.python-version }}" | tr -d '.')-ansible$(printf "${{ matrix.ansible-version }}" | tr -d '.') -- molecule test
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          DISTRIBUTION: ${{ matrix.image }}
+
+  # publish:
+  #   if: github.ref == 'refs/heads/master'
+  #   needs:
+  #     - test
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     - name: galaxy
+  #       uses: robertdebock/galaxy-action@1.1.0
+  #       with:
+  #         galaxy_api_key: ${{ secrets.galaxy_api_key }}
