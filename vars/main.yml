@@ -7,4 +7,21 @@ ufw_facts:
   default_incoming_policy: "{{ ufw_default_incoming_policy }}"
   default_outgoing_policy: "{{ ufw_default_outgoing_policy }}"
   logging: "{{ ufw_logging }}"
-  rules: "{{ ufw_rules }}"
+#  after6_rules: "{{ ufw_etc_ufw_after6_rules }}"
+#  after_rules: "{{ ufw_etc_ufw_after6_rules }}"
+#  before6_rules: "{{ ufw_etc_ufw_before6_rules }}"
+#  before_rules: "{{ ufw_etc_ufw_before_rules }}"
+#  user6_rules: "{{ ufw_etc_ufw_user6_rules }}"
+#  user_rules: "{{ ufw_etc_ufw_user_rules }}"
+
+ufw_etc_default_file: /etc/default/ufw
+ufw_etc_ansible_facts_file: /etc/ansible/facts.d/ufw.fact
+
+ufw_etc_ufw_after6_rules_file: /etc/ufw/after6.rules
+ufw_etc_ufw_after_rules_file: /etc/ufw/after.rules
+
+ufw_etc_ufw_before6_rules_file: /etc/ufw/before6.rules
+ufw_etc_ufw_before_rules_file: /etc/ufw/before.rules
+
+ufw_etc_ufw_user6_rules_file: /etc/ufw/user6.rules
+ufw_etc_ufw_user_rules_file: /etc/ufw/user.rules

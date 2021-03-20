@@ -2,7 +2,7 @@
 ---
 - name: configure | create (local facts) directory
   file:
-    path: /etc/ansible/facts.d/
+    path: "{{ ufw_etc_ansible_facts_file | dirname }}/"
     state: directory
     owner: root
     group: root
@@ -18,22 +18,26 @@
     group: root
     mode: 0644
   with_items:
-    - src: etc/default/ufw.j2
-      dest: /etc/default/ufw
-    - src: etc/ansible/facts.d/ufw.fact.j2
-      dest: /etc/ansible/facts.d/ufw.fact
-  register: configuration
+    - src: "{{ ufw_etc_default_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_default_file }}"
+    - src: "{{ ufw_etc_ansible_facts_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ansible_facts_file }}"
+  register: _configuration
   tags:
     - ufw-configure-facts
 
 - name: configure | reset
   ufw:
     state: reset
-  when: configuration is changed
+  when: >
+    _configuration is changed
+#    or _after_rules is changed
+#    or _before_rules is changed
+#    or _user_rules is changed
   tags:
     - ufw-configure-reset
 
-- name: configure | default (incoming) policy
+- name: configure | default policy | incoming
   ufw:
     policy: "{{ ufw_default_incoming_policy }}"
     direction: incoming
@@ -42,7 +46,7 @@
     - ufw-configure-default-policy
     - ufw-configure-default-policy-incoming
 
-- name: configure | default (outgoing) policy
+- name: configure | default policy | outgoing
   ufw:
     policy: "{{ ufw_default_outgoing_policy }}"
     direction: outgoing
@@ -75,3 +79,60 @@
   notify: reload ufw
   tags:
     - ufw-configure-logging
+
+- name: configure | rules | update after file(s)
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0640
+  with_items:
+    - src: "{{ ufw_etc_ufw_after6_rules_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ufw_after6_rules_file }}"
+    - src: "{{ ufw_etc_ufw_after_rules_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ufw_after_rules_file }}"
+  when: ufw_etc_ufw_after_manage | bool
+  register: _after_rules
+  notify: reload ufw
+  tags:
+    - ufw-configure-rules
+    - ufw-configure-rules-after
+
+- name: configure | rules | update before file(s)
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0640
+  with_items:
+    - src: "{{ ufw_etc_ufw_before6_rules_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ufw_before6_rules_file }}"
+    - src: "{{ ufw_etc_ufw_before_rules_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ufw_before_rules_file }}"
+  when: ufw_etc_ufw_before_manage | bool
+  register: _before_rules
+  notify: reload ufw
+  tags:
+    - ufw-configure-rules
+    - ufw-configure-rules-before
+
+- name: configure | rules | update user file(s)
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0640
+  with_items:
+    - src: "{{ ufw_etc_ufw_user6_rules_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ufw_user6_rules_file }}"
+    - src: "{{ ufw_etc_ufw_user_rules_file.lstrip('/') }}.j2"
+      dest: "{{ ufw_etc_ufw_user_rules_file }}"
+  when: ufw_etc_ufw_user_manage | bool
+  register: _user_rules
+  notify: reload ufw
+  tags:
+    - ufw-configure-rules
+    - ufw-configure-rules-user

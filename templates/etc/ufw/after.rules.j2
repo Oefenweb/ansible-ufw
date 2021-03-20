@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+
+{% for line in ufw_etc_ufw_after_rules | default([]) %}
+{{ line }}
+{% endfor %}
