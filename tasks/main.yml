@@ -2,7 +2,7 @@
 ---
 - name: facts | set
   set_fact:
-     kernel_version: "{{ ansible_kernel | regex_search('^([0-9]+\\.[0-9]+\\.[0-9]+)') }}"
+    kernel_version: "{{ ansible_kernel | regex_search('^([0-9]+\\.[0-9]+\\.[0-9]+)') }}"
   tags:
     - configuration
     - ufw
