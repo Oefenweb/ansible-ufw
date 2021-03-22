@@ -43,6 +43,7 @@ jobs:
       matrix:
         include:
           - distro: debian8
+            ansible-version: '<2.10'
           - distro: debian9
           - distro: debian10
           - distro: ubuntu1604
