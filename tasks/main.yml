@@ -26,6 +26,10 @@
     - ufw
     - ufw-configure
 
+- name: enable ufw
+  ufw:
+    state: enabled
+
 - name: start and enable service
   service:
     name: ufw
