@@ -9,7 +9,8 @@
     - ufw-facts
 
 # see https://askubuntu.com/a/1064533/261010, https://www.spinics.net/lists/netfilter-devel/msg55682.html
-- include: fix-dropped-ssh-sessions.yml
+- include_tasks:
+    file: fix-dropped-ssh-sessions.yml
   when:
     - kernel_version is version('4.14', '>=')
     - kernel_version is version('5', '<')
@@ -18,13 +19,15 @@
     - ufw
     - ufw-fix-dropped-ssh-sessions
 
-- include: install.yml
+- include_tasks:
+    file: install.yml
   tags:
     - configuration
     - ufw
     - ufw-install
 
-- include: configure.yml
+- include_tasks:
+    file: configure.yml
   tags:
     - configuration
     - ufw
