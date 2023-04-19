@@ -1,0 +1,5 @@
+# requirements file
+---
+collections:
+  - name: community.general
+  - name: ansible.posix

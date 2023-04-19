@@ -1,7 +1,7 @@
 # tasks file
 ---
 - name: facts | set
-  set_fact:
+  ansible.builtin.set_fact:
     kernel_version: "{{ ansible_kernel | regex_search('^([0-9]+\\.[0-9]+\\.[0-9]+)') }}"
   tags:
     - configuration
@@ -9,7 +9,8 @@
     - ufw-facts
 
 # see https://askubuntu.com/a/1064533/261010, https://www.spinics.net/lists/netfilter-devel/msg55682.html
-- include: fix-dropped-ssh-sessions.yml
+- name: fix dropped ssh sessions
+  ansible.builtin.import_tasks: fix-dropped-ssh-sessions.yml
   when:
     - kernel_version is version('4.14', '>=')
     - kernel_version is version('5', '<')
@@ -18,20 +19,22 @@
     - ufw
     - ufw-fix-dropped-ssh-sessions
 
-- include: install.yml
+- name: install
+  ansible.builtin.import_tasks: install.yml
   tags:
     - configuration
     - ufw
     - ufw-install
 
-- include: configure.yml
+- name: configure
+  ansible.builtin.import_tasks: configure.yml
   tags:
     - configuration
     - ufw
     - ufw-configure
 
 - name: start and enable service
-  ufw:
+  community.general.ufw:
     state: enabled
   tags:
     - configuration

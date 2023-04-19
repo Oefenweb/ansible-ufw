@@ -1,5 +1,6 @@
 ---
 warn_list:
   - role-name
+  - name[play]
   - name[casing]
-  - '503'
+  - no-handler
