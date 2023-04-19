@@ -1,7 +1,7 @@
 # tasks file
 ---
 - name: configure | create (local facts) directory
-  file:
+  ansible.builtin.file:
     path: /etc/ansible/facts.d/
     state: directory
     owner: root
@@ -11,7 +11,7 @@
     - ufw-configure-facts
 
 - name: configure | update configuration file(s)
-  template:
+  ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
@@ -27,14 +27,14 @@
     - ufw-configure-facts
 
 - name: configure | reset
-  ufw:
+  community.general.ufw:
     state: reset
   when: configuration is changed
   tags:
     - ufw-configure-reset
 
 - name: configure | default (incoming) policy
-  ufw:
+  community.general.ufw:
     policy: "{{ ufw_default_incoming_policy }}"
     direction: incoming
   notify: reload ufw
@@ -43,7 +43,7 @@
     - ufw-configure-default-policy-incoming
 
 - name: configure | default (outgoing) policy
-  ufw:
+  community.general.ufw:
     policy: "{{ ufw_default_outgoing_policy }}"
     direction: outgoing
   notify: reload ufw
@@ -52,7 +52,7 @@
     - ufw-configure-default-policy-outgoing
 
 - name: configure | rules
-  ufw:
+  community.general.ufw:
     rule: "{{ item.rule }}"
     interface: "{{ item.interface | default('') }}"
     direction: "{{ item.direction | default('in') }}"
@@ -70,7 +70,7 @@
     - ufw-configure-rules
 
 - name: configure | logging
-  ufw:
+  community.general.ufw:
     logging: "{{ ufw_logging }}"
   notify: reload ufw
   tags:
