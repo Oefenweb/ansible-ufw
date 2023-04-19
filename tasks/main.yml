@@ -19,7 +19,7 @@
     - ufw
     - ufw-fix-dropped-ssh-sessions
 
-- namne: install
+- name: install
   ansible.builtin.import_tasks: install.yml
   tags:
     - configuration
