@@ -37,14 +37,14 @@ None
 ---
 - hosts: all
   roles:
-    - ufw
+    - oefenweb.ufw
 ```
 
 ##### Allow ssh
 ```yaml
 - hosts: all
   roles:
-    - ufw
+    - oefenweb.ufw
   vars:
     ufw_rules:
       - rule: allow
@@ -57,7 +57,7 @@ None
 ```yaml
 - hosts: all
   roles:
-    - ufw
+    - oefenweb.ufw
   vars:
     ufw_rules:
       - rule: allow
@@ -70,7 +70,7 @@ None
 ```yaml
 - hosts: all
   roles:
-    - ufw
+    - oefenweb.ufw
   vars:
     ufw_rules:
       - rule: allow
