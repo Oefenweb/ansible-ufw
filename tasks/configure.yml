@@ -6,7 +6,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: '0755'
   tags:
     - ufw-configure-facts
 
@@ -16,7 +16,7 @@
     dest: "{{ item.dest }}"
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   with_items:
     - src: etc/default/ufw.j2
       dest: /etc/default/ufw
