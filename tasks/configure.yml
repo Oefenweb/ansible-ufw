@@ -54,8 +54,12 @@
 - name: configure | rules
   community.general.ufw:
     rule: "{{ item.rule }}"
-    interface: "{{ item.interface | default('') }}"
-    direction: "{{ item.direction | default('in') }}"
+    # interface_in and interface_out are mutually exclusive with interface
+    interface: "{{ (item.interface_in is defined or item.interface_out is defined) | ternary(omit, item.interface | default('')) }}"
+    interface_in: "{{ item.interface_in | default(omit) }}"
+    interface_out: "{{ item.interface_out | default(omit) }}"
+    # interface_in and interface_out are mutually exclusive with direction
+    direction: "{{ (item.interface_in is defined or item.interface_out is defined) | ternary(omit, item.direction | default('in')) }}"
     from_ip: "{{ item.from_ip | default('any') }}"
     to_ip: "{{ item.to_ip | default('any') }}"
     from_port: "{{ item.from_port | default('') }}"
