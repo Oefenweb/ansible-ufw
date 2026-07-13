@@ -1,0 +1,11 @@
+---
+- name: Create UFW deletion fixture
+  hosts: all
+  become: true
+  tasks:
+    - name: Create UFW marker rule for deletion test
+      community.general.ufw:
+        rule: allow
+        to_port: "4242"
+        protocol: tcp
+        comment: Molecule deletion marker rule

@@ -16,7 +16,7 @@ None
 
 * `ufw_logging` [default: `off`]: Log level
 
-* `ufw_rules` [default: see `defaults/main.yml`]: Rules to apply
+* `ufw_rules` [default: see `defaults/main.yml`]: Rules to apply. Rule mappings may include `delete`, `insert`, and `insert_relative_to`
 
 * `ufw_etc_default_ipv6` [default: `true`]: Set to yes to apply rules to support IPv6
 * `ufw_etc_default_default_input_policy` [default: `DROP`]: Set the default input policy to `ACCEPT`, `DROP`, or `REJECT`. Please note that if you change this you will most likely want to adjust your rules

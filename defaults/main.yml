@@ -5,6 +5,8 @@ ufw_default_outgoing_policy: allow
 
 ufw_logging: 'off'
 
+# Rule mappings accept community.general.ufw parameters, including delete,
+# insert, and insert_relative_to for bounded rule removal and ordering.
 ufw_rules:
   - rule: allow
     interface: "{{ ansible_default_ipv4['interface'] }}"

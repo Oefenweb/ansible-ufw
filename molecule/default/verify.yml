@@ -2,4 +2,31 @@
 - name: Verify
   hosts: all
   become: true
-  tasks: []
+  pre_tasks:
+    - name: Include test variables
+      ansible.builtin.include_vars: "{{ playbook_dir }}/../../tests/vars/main.yml"
+  roles:
+    - ../../../
+  tasks:
+    - name: Read numbered UFW status
+      ansible.builtin.command:
+        argv:
+          - ufw
+          - status
+          - numbered
+      register: ufw_status
+      changed_when: false
+
+    - name: Assert the inserted rule is first
+      ansible.builtin.assert:
+        that:
+          - "'[ 1] 2222/tcp' in ufw_status.stdout"
+        fail_msg: >-
+          The rule using insert and insert_relative_to was not the first UFW
+          rule.
+
+    - name: Assert the deletion rule was removed
+      ansible.builtin.assert:
+        that:
+          - "'4242/tcp' not in ufw_status.stdout"
+        fail_msg: The rule using delete=true remains in UFW status.
