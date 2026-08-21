@@ -33,7 +33,7 @@
   tags:
     - ufw-configure-reset
 
-- name: configure | default (incoming) policy
+- name: configure | default (incoming) policy  # noqa args[module]
   community.general.ufw:
     policy: "{{ ufw_default_incoming_policy }}"
     direction: incoming
@@ -42,7 +42,7 @@
     - ufw-configure-default-policy
     - ufw-configure-default-policy-incoming
 
-- name: configure | default (outgoing) policy
+- name: configure | default (outgoing) policy  # noqa args[module]
   community.general.ufw:
     policy: "{{ ufw_default_outgoing_policy }}"
     direction: outgoing
