@@ -1,3 +1,18 @@
 # vars file
 ---
 ufw_etc_default_ipv6: false
+ufw_rules:
+  - rule: allow
+    to_port: "22"
+    protocol: tcp
+    comment: Molecule existing marker rule
+  - rule: allow
+    to_port: "2222"
+    protocol: tcp
+    insert: 1
+    insert_relative_to: zero
+    comment: Molecule inserted marker rule
+  - rule: allow
+    to_port: "4242"
+    protocol: tcp
+    delete: true

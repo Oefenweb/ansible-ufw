@@ -54,6 +54,7 @@
 - name: configure | rules
   community.general.ufw:
     rule: "{{ item.rule }}"
+    delete: "{{ item.delete | default(omit) }}"
     interface: "{{ item.interface | default('') }}"
     direction: "{{ item.direction | default('in') }}"
     from_ip: "{{ item.from_ip | default('any') }}"
@@ -62,6 +63,8 @@
     to_port: "{{ item.to_port | default('') }}"
     protocol: "{{ item.protocol | default('any') }}"
     route: "{{ item.route | default(omit) }}"
+    insert: "{{ item.insert | default(omit) }}"
+    insert_relative_to: "{{ item.insert_relative_to | default(omit) }}"
     log: "{{ item.log | default(false) }}"
     comment: "{{ item.comment | default(omit) }}"
   with_items: "{{ ufw_rules }}"

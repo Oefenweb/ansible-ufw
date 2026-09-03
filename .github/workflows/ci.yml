@@ -46,6 +46,7 @@ jobs:
         include:
           - distro: debian11
           - distro: debian12
+          - distro: debian13
           - distro: ubuntu1804
             ansible-version: '>=9, <10'
           - distro: ubuntu2004
